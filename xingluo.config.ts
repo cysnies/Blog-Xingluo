@@ -15,6 +15,9 @@ export default defineXingluoConfig({
     lang: "zh-cn",
     timezone: "Asia/Shanghai",
     dir: "ltr",
+    favicon: {
+      ico: "favicon.ico",
+    },
   },
   posts: {
     perPage: 8,
@@ -28,7 +31,7 @@ export default defineXingluoConfig({
     showCategories: true,
     showBackButton: true,
     editPost: {
-      enabled: false,
+      enabled: true,
       url: "https://github.com/cysnies/Xingluo/edit/main/",
     },
     search: "pagefind",

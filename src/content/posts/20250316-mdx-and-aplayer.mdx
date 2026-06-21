@@ -18,9 +18,9 @@ category: 技术
 
 ## 效果
 
-import Aplayer from '@/components/APlayer.astro';
+import { APlayer } from '@/components/mdx';
 
-<Aplayer 
+<APlayer 
   fixed={false}
   autoplay={false}
   audio={[
@@ -39,9 +39,9 @@ import Aplayer from '@/components/APlayer.astro';
 在 mdx 文章中插入如下代码：
 
 ```mdx
-import Aplayer from '@/components/APlayer.astro';
+import { APlayer } from '@/components/mdx';
 
-<Aplayer 
+<APlayer 
   fixed={false}
   autoplay={false}
   audio={[
