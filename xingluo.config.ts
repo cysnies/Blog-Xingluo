@@ -31,10 +31,11 @@ export default defineXingluoConfig({
     showCategories: true,
     showBackButton: true,
     showPostCardHero: true,
+    showPostCardHeroMobile: false,
     showPostDetailHero: true,
     editPost: {
-      enabled: true,
-      url: "https://github.com/cysnies/Xingluo/edit/main/",
+      enabled: false,
+      url: "https://github.com/cysnies/Blog-Xingluo/edit/main/",
     },
     search: "pagefind",
     mdx: true,

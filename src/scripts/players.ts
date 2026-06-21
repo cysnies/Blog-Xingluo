@@ -22,42 +22,85 @@ import aplayerCssUrl from "aplayer/dist/APlayer.min.css?url";
 /** 运行时注入 APlayer 样式 <link> 的 Promise，确保 CSS 加载完毕后再实例化播放器 */
 let aplayerCssPromise: Promise<void> | null = null;
 
-/** 注入 APlayer 样式 <link> 并等待加载完成（仅首次调用时生效） */
+/**
+ * 注入 APlayer 样式 <link> 并等待加载完成。
+ *
+ * 每次调用前会检查 <link> 是否仍在 <head> 中——View Transitions 的
+ * swapHeadElements() 会移除仅存在于当前 head 但不在新文档 head 中的元素，
+ * 导致导航离开再返回后 CSS 丢失。若 <link> 被移除则重新注入。
+ */
 function ensureAPlayerCss(): Promise<void> {
-  if (aplayerCssPromise) return aplayerCssPromise;
-  aplayerCssPromise = new Promise<void>((resolve) => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = aplayerCssUrl;
-    // CSS 加载完成或失败均 resolve，避免阻塞播放器初始化
-    link.onload = () => resolve();
-    link.onerror = () => resolve();
-    document.head.appendChild(link);
-  });
+  // 检查 CSS <link> 是否仍存在于 <head> 中（View Transitions 可能已将其移除）
+  const linkExists = document.head.querySelector<HTMLLinkElement>(
+    `link[rel=stylesheet][href="${aplayerCssUrl}"]`,
+  );
+  if (!linkExists) {
+    // link 被移除，重置 Promise 以便重新注入
+    aplayerCssPromise = null;
+  }
+
+  if (!aplayerCssPromise) {
+    aplayerCssPromise = new Promise<void>((resolve) => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = aplayerCssUrl;
+      // CSS 加载完成或失败均 resolve，避免阻塞播放器初始化
+      link.onload = () => resolve();
+      link.onerror = () => resolve();
+      document.head.appendChild(link);
+    });
+  }
   return aplayerCssPromise;
 }
 
-/** 动态加载 APlayer 模块与样式（共享 Promise 避免重复加载） */
+/** 动态加载 APlayer 模块（共享 Promise 避免重复加载，不含 CSS） */
 async function loadAPlayer(): Promise<typeof import("aplayer")> {
   if (!aplayerMod) {
-    aplayerMod = (async () => {
-      // 与 JS 模块并行加载 CSS，但确保 CSS 先于实例化完成
-      const [mod] = await Promise.all([import("aplayer"), ensureAPlayerCss()]);
-      return mod;
-    })();
+    aplayerMod = import("aplayer");
   }
   return aplayerMod;
 }
 
-/** 动态加载 DPlayer 模块（样式已内联于 JS） */
+/** 缓存的 DPlayer CSS 文本内容（首次加载时从 style-loader 注入的 <style> 中捕获） */
+let dplayerCssContent: string | null = null;
+
+/** 动态加载 DPlayer 模块，并捕获 style-loader 注入的 CSS 内容 */
 async function loadDPlayer(): Promise<typeof import("dplayer")> {
   if (!dplayerMod) {
     dplayerMod = (async () => {
-      // DPlayer 的样式打包在 JS 中，无需单独 import CSS
-      return await import("dplayer");
+      const mod = await import("dplayer");
+      // DPlayer 的 webpack 构建使用 style-loader，在模块首次执行时同步
+      // 向 <head> 注入 <style> 元素。捕获其文本内容以便后续恢复。
+      for (const style of document.head.querySelectorAll("style")) {
+        if (style.textContent?.includes(".dplayer")) {
+          dplayerCssContent = style.textContent;
+          break;
+        }
+      }
+      return mod;
     })();
   }
   return dplayerMod;
+}
+
+/**
+ * 确保 DPlayer 的 <style> 仍在 <head> 中。
+ *
+ * View Transitions 的 swapHeadElements() 会移除仅存在于当前 head 但不在
+ * 新文档 head 中的元素。由于 DPlayer 的 CSS 由 style-loader 在 JS 首次
+ * 执行时动态注入，模块缓存后不会重新注入，故需手动恢复。
+ */
+function ensureDPlayerCss(): void {
+  if (!dplayerCssContent) return;
+
+  const styleExists = Array.from(document.head.querySelectorAll("style")).some(
+    (s) => s.textContent === dplayerCssContent,
+  );
+  if (!styleExists) {
+    const style = document.createElement("style");
+    style.textContent = dplayerCssContent;
+    document.head.appendChild(style);
+  }
 }
 
 /** 等待下一帧以确保 DOM 布局已稳定（View Transitions 动画可能影响容器尺寸） */
@@ -65,14 +108,21 @@ function waitForNextFrame(): Promise<void> {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }
 
-/** 实例化单个 APlayer 占位 */
+/**
+ * 实例化单个 APlayer 占位
+ *
+ * 每次调用独立检查 CSS <link> 是否在 <head> 中，因为 View Transitions 的
+ * swapHeadElements() 可能在导航时将其移除。若被移除则重新注入并等待加载完成。
+ */
 async function mountAPlayer(el: HTMLElement): Promise<void> {
   if (el.dataset.xngInit === "1") return;
   el.dataset.xngInit = "1";
   try {
     const raw = decodeURIComponent(el.dataset.config ?? "{}");
     const config = JSON.parse(raw) as Record<string, unknown>;
-    const APlayer = (await loadAPlayer()).default;
+    // 并行加载 CSS 与 JS 模块
+    const [mod] = await Promise.all([loadAPlayer(), ensureAPlayerCss()]);
+    const APlayer = mod.default;
     // 等待一帧确保浏览器已完成布局计算，避免 View Transition 动画期间尺寸异常
     await waitForNextFrame();
     new APlayer({ container: el, ...config });
@@ -89,6 +139,8 @@ async function mountDPlayer(el: HTMLElement): Promise<void> {
     const raw = decodeURIComponent(el.dataset.config ?? "{}");
     const config = JSON.parse(raw) as Record<string, unknown>;
     const DPlayer = (await loadDPlayer()).default;
+    // 确保 DPlayer 的 CSS <style> 仍在 <head> 中（View Transitions 可能已移除）
+    ensureDPlayerCss();
     // 等待一帧确保浏览器已完成布局计算
     await waitForNextFrame();
     new DPlayer({ container: el, ...config });
