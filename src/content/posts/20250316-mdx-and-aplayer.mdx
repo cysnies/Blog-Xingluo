@@ -18,19 +18,19 @@ category: 技术
 
 ## 效果
 
-import { APlayer } from '@/components/mdx';
+import { APlayer } from "@/components/mdx";
 
-<APlayer 
+<APlayer
   fixed={false}
   autoplay={false}
   audio={[
     {
-      name: 'Moon Halo',
-      artist: '茶理理,TetraCalyx,Hanser,HOYO-MiX',
-      url: 'https://res.tcea.top/d/123/tcea/Moon%20Halo%20-%20%E8%8C%B6%E7%90%86%E7%90%86%E7%90%86%E5%AD%90%E3%80%81TetraCalyx%E3%80%81hanser%E3%80%81HOYO-MiX.mp3',
-      cover: 'https://s21.ax1x.com/2025/03/16/pEabRyj.png',
-      lrc: 'https://res.tcea.top/d/123/tcea/Moon%20Halo%20-%20%E8%8C%B6%E7%90%86%E7%90%86%E7%90%86%E5%AD%90%E3%80%81TetraCalyx%E3%80%81hanser%E3%80%81HOYO-MiX.lrc'
-    }
+      name: "Moon Halo",
+      artist: "茶理理,TetraCalyx,Hanser,HOYO-MiX",
+      url: "https://res.tcea.top/d/123/tcea/Moon%20Halo%20-%20%E8%8C%B6%E7%90%86%E7%90%86%E7%90%86%E5%AD%90%E3%80%81TetraCalyx%E3%80%81hanser%E3%80%81HOYO-MiX.mp3",
+      cover: "https://s21.ax1x.com/2025/03/16/pEabRyj.png",
+      lrc: "https://res.tcea.top/d/123/tcea/Moon%20Halo%20-%20%E8%8C%B6%E7%90%86%E7%90%86%E7%90%86%E5%AD%90%E3%80%81TetraCalyx%E3%80%81hanser%E3%80%81HOYO-MiX.lrc",
+    },
   ]}
 />
 
@@ -39,19 +39,19 @@ import { APlayer } from '@/components/mdx';
 在 mdx 文章中插入如下代码：
 
 ```mdx
-import { APlayer } from '@/components/mdx';
+import { APlayer } from "@/components/mdx";
 
-<APlayer 
+<APlayer
   fixed={false}
   autoplay={false}
   audio={[
     {
-      name: 'Song Name',
-      artist: 'Artist',
-      url: 'Song.mp3',
-      cover: 'Cover.png',
-      lrc: 'lrc.lrc'
-    }
+      name: "Song Name",
+      artist: "Artist",
+      url: "Song.mp3",
+      cover: "Cover.png",
+      lrc: "lrc.lrc",
+    },
   ]}
 />
 ```
@@ -65,6 +65,7 @@ import { APlayer } from '@/components/mdx';
 ```bash
 npm install @astrojs/mdx
 ```
+
 然后在 `src/astro.config.ts` 中引入 `mdx` 并在 `integrations` 部分加入 `mdx()`：
 
 ```ts
@@ -98,48 +99,48 @@ const blog = defineCollection({
 npm install aplayer --save
 ```
 
-然后，在 `src` 目录下新增 `types` 目录，在  `src/types/aplayer.d.ts` 中编写类型定义：
+然后，在 `src` 目录下新增 `types` 目录，在 `src/types/aplayer.d.ts` 中编写类型定义：
 
 ```ts
-declare module 'aplayer' {
-    interface Audio {
-      name: string;
-      artist: string;
-      url: string;
-      cover: string;
-      lrc: string;
-      [key: string]: any;
-    }
-  
-    interface APlayerOptions {
-      container: HTMLElement;
-      fixed?: boolean;
-      autoplay?: boolean;
-      mini?: boolean;
-      theme?: string;
-      loop?: 'all' | 'one' | 'none';
-      order?: 'list' | 'random';
-      volume?: number;
-      audio: Audio[];
-    }
-  
-    class APlayer {
-      constructor(options: APlayerOptions);
-      currentTime: number;
-      paused: boolean;
-      volume: number;
-      play(): void;
-      pause(): void;
-      destroy(): void;
-    }
-  
-    export default APlayer;
+declare module "aplayer" {
+  interface Audio {
+    name: string;
+    artist: string;
+    url: string;
+    cover: string;
+    lrc: string;
+    [key: string]: any;
   }
-  
-  // 扩展 Window 类型
-  interface Window {
-    APlayer: typeof import('aplayer').default;
+
+  interface APlayerOptions {
+    container: HTMLElement;
+    fixed?: boolean;
+    autoplay?: boolean;
+    mini?: boolean;
+    theme?: string;
+    loop?: "all" | "one" | "none";
+    order?: "list" | "random";
+    volume?: number;
+    audio: Audio[];
   }
+
+  class APlayer {
+    constructor(options: APlayerOptions);
+    currentTime: number;
+    paused: boolean;
+    volume: number;
+    play(): void;
+    pause(): void;
+    destroy(): void;
+  }
+
+  export default APlayer;
+}
+
+// 扩展 Window 类型
+interface Window {
+  APlayer: typeof import("aplayer").default;
+}
 ```
 
 接着，在 `src/layouts/Layout.astro` 的 `header` 内加入如下代码，实现全局导入 APlayer。
@@ -148,7 +149,7 @@ declare module 'aplayer' {
     <script>
       // @ts-ignore - 显式声明全局类型
       import APlayer from 'aplayer';
-      
+
       // 通过类型断言解决类型问题
       (window as unknown as { APlayer: typeof APlayer }).APlayer = APlayer;
     </script>
@@ -177,7 +178,7 @@ interface Props {
   volume?: number;
 }
 
-const { 
+const {
   audio,
   fixed = false,
   mini = false,
@@ -214,7 +215,7 @@ const config = JSON.stringify({
       if (!container || player) return;
 
       const config = JSON.parse(container.dataset.config);
-      
+
       player = new APlayer({
         container: container,
         ...config,

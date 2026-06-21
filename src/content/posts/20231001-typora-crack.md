@@ -78,16 +78,16 @@ git clone https://github.com/hazukieq/Yporaject.git --depth=1
 > ```
 >
 > 也可以使用
-> 
+>
 > ```
 > git config --global http.proxy/https.proxy
 > ```
-> 
+>
 > 来为 Git 手动设置代理，本文不再赘述。
 
 ### 编译 Yporaject 项目
 
-下面的命令适用于  Bash，Windows Powershell 需要略作调整。
+下面的命令适用于 Bash，Windows Powershell 需要略作调整。
 
 ```
 # 进入 Yporaject 项目

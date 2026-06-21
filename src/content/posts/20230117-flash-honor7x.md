@@ -17,17 +17,17 @@ timezone: Asia/Shanghai
 category: 技术
 ---
 
->由于系统崩坏等一系列原因，我在春节前夕准备彻底告别伴随我两年之久的旧的原厂系统。本文简单记录了我的刷机过程。
+> 由于系统崩坏等一系列原因，我在春节前夕准备彻底告别伴随我两年之久的旧的原厂系统。本文简单记录了我的刷机过程。
 
 ## 刷入原厂固件
 
 ### 备份数据
 
->**数据无价，备份数据是刷机前的首要准备工作。**
+> **数据无价，备份数据是刷机前的首要准备工作。**
 
 ### 获取固件和TWRP Recovery
 
->如无必要，**强烈不建议使用奇兔刷机等刷机工具提供的固件以及一键刷机服务。**
+> 如无必要，**强烈不建议使用奇兔刷机等刷机工具提供的固件以及一键刷机服务。**
 
 如果想继续使用国行版系统的话，可以通过华为手机助手的升级或降级操作下载原厂固件。其下载的固件一般存储在 `C:\Users\用户名\Documents\HiSuite\ROM` 目录下。
 
@@ -41,7 +41,7 @@ category: 技术
 
 在 [XDA论坛](https://forum.xda-developers.com/) 上以 `BND-AL10 TWRP` 为关键字搜索得到 [该机型的TWRP Recovery文件](https://forum.xda-developers.com/t/compilation-firmware-flash-emui-8-0-0-honor-7x-all-models.3833875/)。
 
->**该 Recovery 仅适配 Honor 7X 的出厂系统 EMUI 8.0.0，如果后续通过 OTA 升级到 EMUI 9.0/9.1，需要先通过华为手机助手降级到 EMUI 8.0.0，然后再刷入 TWRP Recovery。**
+> **该 Recovery 仅适配 Honor 7X 的出厂系统 EMUI 8.0.0，如果后续通过 OTA 升级到 EMUI 9.0/9.1，需要先通过华为手机助手降级到 EMUI 8.0.0，然后再刷入 TWRP Recovery。**
 
 ### 解锁 Bootloader
 
@@ -49,7 +49,7 @@ category: 技术
 
 我的设备已经解锁了 Bootloader，因此本次刷机无需进行这一步。
 
->**解锁 Bootloader 时会清除个人数据，请务必做好备份工作！**
+> **解锁 Bootloader 时会清除个人数据，请务必做好备份工作！**
 
 ### 刷入 TWRP Recovery
 
@@ -114,22 +114,24 @@ category: 技术
    fastboot reboot
    ```
 4. 在正常系统中通过 adb 重启到 Recovery。
+
    ```
    adb reboot recovery
    ```
->**此时的 Recovery 分区已经刷入了 Magisk，执行此命令后将进入带有 Magisk 环境的系统，而不是先前的 TWRP Recovery。**
+
+   > **此时的 Recovery 分区已经刷入了 Magisk，执行此命令后将进入带有 Magisk 环境的系统，而不是先前的 TWRP Recovery。**
 
 5. 进入系统后打开 Magisk Manager，点击`安装——安装到 Recovery——直接安装（推荐）`，等待 Magisk 安装完成后重启手机，自动进入带有 Magisk 的系统。
 
->以这种方式安装的 Magisk 位于 Recovery 分区内，需要从 Recovery 分区引导启动系统。由于 Magisk和 Recovery 都在同一个分区，因此进入系统或 Recovery 取决于开机时按下音量键时间的长短。即：
+> 以这种方式安装的 Magisk 位于 Recovery 分区内，需要从 Recovery 分区引导启动系统。由于 Magisk和 Recovery 都在同一个分区，因此进入系统或 Recovery 取决于开机时按下音量键时间的长短。即：
 >
->正常开机——进入到不含 Magisk 的系统；
+> 正常开机——进入到不含 Magisk 的系统；
 >
->同时按下音量 + 键和电源键开机——第一屏出现——放开所有按键——进入到启用 Magisk 的系统；
+> 同时按下音量 + 键和电源键开机——第一屏出现——放开所有按键——进入到启用 Magisk 的系统；
 >
->同时按下音量 + 键和电源键开机——第一屏出现——继续按音量+键——进入 Recovery。
+> 同时按下音量 + 键和电源键开机——第一屏出现——继续按音量+键——进入 Recovery。
 >
->但是，由于 Magisk App 此时已经了解设备的状态，因此可以直接在 Magisk App 中普通重启到启用Magisk 的系统。
+> 但是，由于 Magisk App 此时已经了解设备的状态，因此可以直接在 Magisk App 中普通重启到启用Magisk 的系统。
 
 ## 刷入 LSPosed
 

@@ -37,7 +37,7 @@ Tips: 用完记得关掉。
 javascript:(function(bookmarklets)%7Bfor(var i=0;i<bookmarklets.length;i++)%7Bvar code=bookmarklets%5Bi%5D.url;if(code.indexOf("javascript:")!=-1)%7Bcode=code.replace("javascript:","");eval(code)%7Delse%7Bcode=code.replace(/%5Es+%7Cs+$/g,"");if(code.length>0)%7Bwindow.open(code)%7D%7D%7D%7D)(%5B%7Btitle:"破除右键菜单限制",url:"javascript:function applyWin(a)%7Bif(typeof a.__nnANTImm__===%5Cx22undefined%5Cx22)%7Ba.__nnANTImm__=%7B%7D;a.__nnANTImm__.evts=%5B%5Cx22mousedown%5Cx22,%5Cx22mousemove%5Cx22,%5Cx22copy%5Cx22,%5Cx22contextmenu%5Cx22%5D;a.__nnANTImm__.initANTI=function()%7Ba.__nnantiflag__=true;a.__nnANTImm__.evts.forEach(function(c,b,d)%7Ba.addEventListener(c,this.fnANTI,true)%7D,a.__nnANTImm__)%7D;a.__nnANTImm__.clearANTI=function()%7Bdelete a.__nnantiflag__;a.__nnANTImm__.evts.forEach(function(c,b,d)%7Ba.removeEventListener(c,this.fnANTI,true)%7D,a.__nnANTImm__);delete a.__nnANTImm__%7D;a.__nnANTImm__.fnANTI=function(b)%7Bb.stopPropagation();return true%7D;a.addEventListener(%5Cx22unload%5Cx22,function(b)%7Ba.removeEventListener(%5Cx22unload%5Cx22,arguments.callee,false);if(a.__nnantiflag__===true)%7Ba.__nnANTImm__.clearANTI()%7D%7D,false)%7Da.__nnantiflag__===true?a.__nnANTImm__.clearANTI():a.__nnANTImm__.initANTI()%7DapplyWin(top);var fs=top.document.querySelectorAll(%5Cx22frame, iframe%5Cx22);for(var i=0,len=fs.length;i<len;i++)%7Bvar win=fs%5Bi%5D.contentWindow;try%7Bwin.document%7Dcatch(ex)%7Bcontinue%7DapplyWin(fs%5Bi%5D.contentWindow)%7D;void 0;"%7D,%7Btitle:"破除选择复制限制",url:"javascript:(function()%7Bvar doc=document;var bd=doc.body;bd.onselectstart=bd.oncopy=bd.onpaste=bd.onkeydown=bd.oncontextmenu=bd.onmousemove=bd.onselectstart=bd.ondragstart=doc.onselectstart=doc.oncopy=doc.onpaste=doc.onkeydown=doc.oncontextmenu=null;doc.onselectstart=doc.oncontextmenu=doc.onmousedown=doc.onkeydown=function ()%7Breturn true;%7D;with(document.wrappedJSObject%7C%7Cdocument)%7Bonmouseup=null;onmousedown=null;oncontextmenu=null;%7Dvar arAllElements=document.getElementsByTagName(%5Cx27*%5Cx27);for(var i=arAllElements.length-1;i>=0;i--)%7Bvar elmOne=arAllElements;with(elmOne.wrappedJSObject%7C%7CelmOne)%7Bonmouseup=null;onmousedown=null;%7D%7Dvar head=document.getElementsByTagName(%5Cx27head%5Cx27)%5B0%5D;if(head)%7Bvar style=document.createElement(%5Cx27style%5Cx27);style.type=%5Cx27text/css%5Cx27;style.innerHTML=%5Cx22html,*%7B-moz-user-select:auto!important;%7D%5Cx22;head.appendChild(style);%7Dvoid(0);%7D)();"%7D%5D)
 ```
 
-*注：此段代码来自 [奔跑中的奶酪](https://www.runningcheese.com/) 大佬的博客。也可自行搜索使用其他具有相同效果的代码。*
+_注：此段代码来自 [奔跑中的奶酪](https://www.runningcheese.com/) 大佬的博客。也可自行搜索使用其他具有相同效果的代码。_
 
 ### Console 调试法（推荐）
 
@@ -54,7 +54,7 @@ event.returnValue=true;
 };
 document.oncontextmenu=function(){
 event.returnValue=true;
-}; 
+};
 ```
 
 #### 代码二
