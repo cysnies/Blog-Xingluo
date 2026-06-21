@@ -64,11 +64,21 @@ const showHero = !!heroImageSrc;
 ---
 
 <Card
+  data-spotlight
+  data-reveal
   class={cn(
-    "group relative flex h-[200px] flex-row overflow-hidden transition-colors hover:bg-accent/30",
+    "group relative flex h-[200px] flex-row overflow-hidden transition-[colors,transform] hover:bg-accent/30 [perspective:800px]",
     className
   )}
+  style="transform:rotateX(var(--card-rotate-x,0deg)) rotateY(var(--card-rotate-y,0deg));transition-duration:0.3s;transition-timing-function:ease-out"
 >
+  {/* 鼠标跟随光晕层 */}
+  <div
+    data-spotlight-glow
+    class="pointer-events-none absolute inset-0 transition-opacity duration-500"
+    style="background:radial-gradient(600px circle at var(--spotlight-x,50%) var(--spotlight-y,50%),hsl(var(--primary)/0.08),transparent 60%);opacity:var(--spotlight-opacity,0)"
+    aria-hidden="true"
+  />
   {/* 左侧主内容区：标题、信息、描述、分类与标签 */}
   <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-evenly gap-0 py-2">
     {/* 标题行：固定两行高度，超出两行截断，负边距上移带动信息行，保证跨卡片对齐 */}
@@ -140,3 +150,42 @@ const showHero = !!heroImageSrc;
     />
   )}
 </Card>
+
+<script>
+  // PostCard 点击涟漪效果：点击卡片时在点击位置生成波纹
+  function setupCardRipple() {
+    const cards = document.querySelectorAll<HTMLElement>('[data-spotlight]');
+    for (const card of cards) {
+      if (card.dataset.rippleReady === "true") continue;
+      card.dataset.rippleReady = "true";
+
+      card.addEventListener("click", (e: MouseEvent) => {
+        // 如果点击的是链接或按钮内部，不触发涟漪
+        const target = e.target as HTMLElement;
+        if (target.closest("a, button, [role='button']")) return;
+
+        const rect = card.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        const ripple = document.createElement("span");
+        ripple.className =
+          "pointer-events-none absolute rounded-full bg-primary/10";
+        ripple.style.cssText = `
+          width: ${size}px;
+          height: ${size}px;
+          left: ${x}px;
+          top: ${y}px;
+          transform: scale(0);
+          animation: card-ripple 0.5s ease-out forwards;
+        `;
+        card.appendChild(ripple);
+        ripple.addEventListener("animationend", () => ripple.remove());
+      });
+    }
+  }
+
+  document.addEventListener("astro:page-load", setupCardRipple);
+  setupCardRipple();
+</script>

@@ -62,6 +62,7 @@ const defaultAlternate = {
   dir={site.dir}
   lang={Astro.currentLocale ?? site.lang}
   class="overflow-y-scroll scroll-smooth"
+  data-animations={JSON.stringify(config.features.animations)}
 >
   <head>
     <meta charset="UTF-8" />
@@ -138,12 +139,27 @@ const defaultAlternate = {
       })();
     </script>
 
+    <!-- 将动画配置序列化为 JSON 嵌入 data 属性，供客户端脚本读取 -->
     <ClientRouter />
   </head>
-  <body class="bg-background text-foreground app-layout">
+  <body
+    class="bg-background text-foreground app-layout"
+    data-animations-toc={config.features.animations.tocSmooth}
+    data-animations-theme={config.features.animations.themeTransition}
+  >
     <slot />
     <script>
       import "@/scripts/theme";
     </script>
+    {
+      /* 动画模块入口 */
+      (config.features.animations.spotlightCard ||
+        config.features.animations.scrollReveal ||
+        config.features.animations.navIndicator) && (
+        <script>
+          import "@/scripts/animations";
+        </script>
+      )
+    }
   </body>
 </html>

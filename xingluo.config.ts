@@ -37,7 +37,7 @@ export default defineXingluoConfig({
       enabled: false,
       url: "https://github.com/cysnies/Blog-Xingluo/edit/main/",
     },
-    search: "pagefind",
+    search: "flexsearch",
     mdx: true,
     comments: {
       provider: "twikoo",

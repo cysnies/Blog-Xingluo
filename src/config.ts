@@ -29,6 +29,7 @@ const defaultSite = {
   ogImage: DEFAULT_OG_IMAGE,
   timezone: "Asia/Shanghai",
   dir: "ltr" as const,
+  copyright: "© {{year}} {{author}}",
   googleVerification: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION,
   favicon: {
     svg: DEFAULT_FAVICON_SVG,
@@ -50,6 +51,8 @@ const defaultFeatures = {
   showArchives: true,
   showCategories: true,
   showBackButton: true,
+  showHomeSocials: true,
+  showFooterSocials: true,
   /** 默认在文章卡片中展示文章头图 */
   showPostCardHero: true,
   /** 移动端默认关闭文章卡片中的头图展示，防止头图与文字挤在一起阻碍阅读 */
@@ -60,7 +63,7 @@ const defaultFeatures = {
     enabled: false,
     url: "",
   },
-  search: "pagefind" as const,
+  search: "flexsearch" as const,
   /** 默认启用 MDX 解析与渲染 */
   mdx: true,
   /** 默认关闭评论系统 */
@@ -76,6 +79,21 @@ const defaultFeatures = {
   googleFontsMirror: {
     enabled: false,
     url: "https://fonts.googleapis.cn",
+  },
+  /** 动效动画默认全部开启 */
+  animations: {
+    spotlightCard: true,
+    cardTilt: true,
+    scrollReveal: true,
+    navIndicator: true,
+    mobileMenuTransition: true,
+    buttonPress: true,
+    themeTransition: true,
+    textReveal: true,
+    tocSmooth: true,
+    backToTopEnhanced: true,
+    adjacentPostGlow: true,
+    searchResultAnim: true,
   },
 };
 
