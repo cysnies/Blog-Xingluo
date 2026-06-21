@@ -103,11 +103,37 @@ function extractSearchData(html, filePath) {
   const descMatch = html.match(
     /<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i,
   );
-  // 提取标签
-  const tagMatches = html.matchAll(
-    /<meta\s+property=["']article:tag["']\s+content=["']([^"']*)["']/gi,
+
+  // 提取发布时间和更新时间（取所有 <time datetime="...">）
+  const timeMatches = [
+    ...html.matchAll(/<time[^>]*datetime=["']([^"']+)["'][^>]*>/gi),
+  ];
+  const pubDatetime = timeMatches.length > 0 ? timeMatches[0][1] : "";
+  // 如果存在第二个 time 元素且附近有"更新于"标记，则为更新时间
+  let modDatetime = "";
+  if (timeMatches.length > 1) {
+    // 检查第二个 time 附近是否有"更新于"关键词
+    const secondTimeIndex = html.indexOf(timeMatches[1][0]);
+    const contextBefore = html.slice(
+      Math.max(0, secondTimeIndex - 20),
+      secondTimeIndex,
+    );
+    if (contextBefore.includes("更新于") || contextBefore.includes("Updated")) {
+      modDatetime = timeMatches[1][1];
+    }
+  }
+
+  // 提取分类（第一个 /categories/ 链接的文本）
+  const catMatch = html.match(
+    /href=["']\/categories\/([^"']+)["'][^>]*>\s*([^<]+)\s*<\//i,
   );
-  const tags = [...tagMatches].map((m) => m[1]);
+  const category = catMatch ? catMatch[2].trim() : "";
+
+  // 提取标签（所有 /tags/ 链接的文本，去重）
+  const tagLinkMatches = html.matchAll(
+    /href=["']\/tags\/([^"']+)["'][^>]*>\s*([^<]+)\s*<\//gi,
+  );
+  const tags = [...new Set([...tagLinkMatches].map((m) => m[2].trim()))];
 
   // 提取正文内容（<main> 或 <article> 内的文本）
   let content = "";
@@ -135,7 +161,10 @@ function extractSearchData(html, filePath) {
     id,
     title,
     description: descMatch ? descMatch[1] : "",
+    pubDatetime,
+    modDatetime,
     tags,
+    category,
     content: content.slice(0, 5000), // 限制内容长度
     url: relativePath,
     locale,
@@ -175,7 +204,10 @@ async function main() {
         id: data.id,
         title: data.title,
         description: data.description,
+        pubDatetime: data.pubDatetime,
+        modDatetime: data.modDatetime,
         tags: data.tags,
+        category: data.category,
         content: data.content,
         url: data.url,
       });
