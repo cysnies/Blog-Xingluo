@@ -70,8 +70,7 @@ const showHero = !!heroImageSrc;
   )}
 >
   {/* 左侧主内容区：标题、信息、描述、分类与标签 */}
-  <!-- 线性渐变过渡层：浅色主题白色渐变，深色主题黑色渐变，提升文字在头图上的可读性 -->
-  <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-evenly gap-0 py-3 bg-gradient-to-b from-transparent via-white/40 to-white/85 dark:via-black/40 dark:to-black/85">
+  <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-evenly gap-0 py-3">
     {/* 标题行：固定高度，保证跨卡片对齐 */}
     <CardTitle
       transition:name={transitionName}
@@ -121,7 +120,7 @@ const showHero = !!heroImageSrc;
     }
   </div>
 
-  {/* 头图背景层：全局开关开启且文章配置了头图时，作为卡片右侧背景展示，并带有从左到右的透明渐变过渡 */}
+  {/* 头图背景层：全局开关开启且文章配置了头图时，作为卡片右半部分背景展示，带有从左到右的自然透明渐变过渡 */}
   {showHero && (
     <div
       class="pointer-events-none absolute inset-0"
@@ -130,9 +129,9 @@ const showHero = !!heroImageSrc;
         backgroundSize: "cover",
         backgroundPosition: "right center",
         maskImage:
-          "linear-gradient(to right, transparent 0%, transparent 25%, black 55%, black 100%)",
+          "linear-gradient(to right, transparent 0%, transparent 40%, black 55%, black 100%)",
         WebkitMaskImage:
-          "linear-gradient(to right, transparent 0%, transparent 25%, black 55%, black 100%)",
+          "linear-gradient(to right, transparent 0%, transparent 40%, black 55%, black 100%)",
       }}
     />
   )}
