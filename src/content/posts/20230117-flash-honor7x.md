@@ -1,6 +1,7 @@
 ---
 author: 白鼠Cysnies
 pubDatetime: 2023-01-17T10:25:54.547Z
+modDatetime: 2023-01-17T10:25:54.547Z
 title: 辞旧迎新——荣耀畅玩 7X（BND-AL10）刷机手记
 featured: false
 draft: false
