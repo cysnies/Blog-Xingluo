@@ -30,6 +30,8 @@ export default defineXingluoConfig({
     showArchives: true,
     showCategories: true,
     showBackButton: true,
+    showPostCardHero: true,
+    showPostDetailHero: true,
     editPost: {
       enabled: true,
       url: "https://github.com/cysnies/Xingluo/edit/main/",

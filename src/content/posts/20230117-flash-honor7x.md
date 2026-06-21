@@ -4,7 +4,7 @@ pubDatetime: 2023-01-17T10:25:54.547Z
 title: 辞旧迎新——荣耀畅玩 7X（BND-AL10）刷机手记
 featured: false
 draft: false
-ogImage: https://m.360buyimg.com/babel/jfs/t1/221156/11/14683/669884/63c69b14Fb5763414/3d20dbd73169c90d.jpg
+heroImage: https://m.360buyimg.com/babel/jfs/t1/221156/11/14683/669884/63c69b14Fb5763414/3d20dbd73169c90d.jpg
 tags:
   - Android
   - Flashing
