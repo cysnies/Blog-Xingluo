@@ -6,11 +6,11 @@ import { defineXingluoConfig } from "./src/types/config";
  */
 export default defineXingluoConfig({
   site: {
-    url: "https://xingluo.example.com/",
-    title: "星罗",
-    description: "基于 Astro 与 shadcn 的现代化博客 CMS",
-    author: "星罗",
-    profile: "https://xingluo.example.com",
+    url: "https://blog.tcea.top/",
+    title: "白鼠的小站",
+    description: "一个平平无奇的个人博客",
+    author: "白鼠 Cysnies",
+    profile: "https://blog.tcea.top/",
     ogImage: "default-og.jpg",
     lang: "zh-cn",
     timezone: "Asia/Shanghai",
@@ -25,46 +25,27 @@ export default defineXingluoConfig({
     lightAndDarkMode: true,
     dynamicOgImage: true,
     showArchives: true,
-    // 是否显示分类页与导航入口（文章通过 frontmatter 的 category 字段归类）
     showCategories: true,
     showBackButton: true,
     editPost: {
-      enabled: true,
+      enabled: false,
       url: "https://github.com/cysnies/Xingluo/edit/main/",
     },
     search: "pagefind",
-    // 是否启用 MDX 解析与渲染（关闭后仅收集 .md，不加载 mdx 集成）
     mdx: true,
-    // 评论系统配置：三选一或关闭。provider 为某值时需提供对应子配置。
     comments: {
-      provider: false,
-      // giscus 示例（需在 https://giscus.app 生成 repoId/categoryId）：
-      // giscus: {
-      //   repo: "owner/repo",
-      //   repoId: "R_...",
-      //   category: "Announcements",
-      //   categoryId: "DIC_...",
-      //   mapping: "pathname",
-      //   reactionsEnabled: true,
-      //   inputPosition: "bottom",
-      //   loading: "lazy",
-      // },
-      // twikoo 示例（envId 为云环境 ID 或自托管服务完整 URL）：
-      // twikoo: { envId: "https://your-twikoo.example.com", lang: "zh-CN" },
-      // waline 示例：
-      // waline: { serverURL: "https://waline.example.com", lang: "zh-CN" },
+      provider: "twikoo",
+      twikoo: { envId: "https://twikoo.tcea.top", lang: "zh-CN" },
     },
-    // 媒体播放器开关：在 md 中通过 ```aplayer / ```dplayer 围栏创建，
-    // 在 mdx 中通过 import { APlayer, DPlayer } from "@/components/mdx" 使用。
     players: {
-      aplayer: false,
-      dplayer: false,
+      aplayer: true,
+      dplayer: true,
     },
   },
   socials: [
-    { name: "github", url: "https://github.com/cysnies/Xingluo" },
-    { name: "x", url: "https://x.com/xingluo" },
-    { name: "mail", url: "mailto:hello@xingluo.example.com" },
+    { name: "github", url: "https://github.com/cysnies" },
+    { name: "x", url: "https://x.com/Cysnies" },
+    { name: "mail", url: "mailto:official@tcea.top" },
   ],
   shareLinks: [
     { name: "x", url: "https://x.com/intent/post?url=" },
