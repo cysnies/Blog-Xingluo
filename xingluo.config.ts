@@ -48,6 +48,10 @@ export default defineXingluoConfig({
       dplayer: true,
     },
   },
+  fonts: {
+    mode: "fixed",
+    family: "lxgw-wenkai-lite",
+  },
   socials: [
     { name: "github", url: "https://github.com/cysnies" },
     { name: "x", url: "https://x.com/Cysnies" },
