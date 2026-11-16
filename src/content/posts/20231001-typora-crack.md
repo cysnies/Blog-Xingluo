@@ -5,7 +5,7 @@ modDatetime: 2023-10-01T10:25:54.547Z
 title: 通过 NodeInject 和 Yporaject 激活 Typora
 featured: false
 draft: false
-heroImage: https://z1.ax1x.com/2023/10/01/pPqb7Of.jpg
+heroImage: "../../assets/post-heroes/20231001-typora-crack.jpg"
 tags:
   - Typora
   - Crack

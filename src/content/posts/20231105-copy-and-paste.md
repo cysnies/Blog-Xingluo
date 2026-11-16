@@ -5,7 +5,7 @@ modDatetime: 2023-11-05T10:25:54.547Z
 title: 轻松解除网页复制与粘贴限制
 featured: false
 draft: false
-heroImage: https://z1.ax1x.com/2023/11/05/piQ6pn0.jpg
+heroImage: "../../assets/post-heroes/20231105-copy-and-paste.jpg"
 tags:
   - Web
   - JavaScript

@@ -5,7 +5,7 @@ modDatetime: 2022-12-08T10:25:54.547Z
 title: 部署 Cloudflare Argo Tunnel 实现零成本内网穿透
 featured: false
 draft: false
-heroImage: https://p0.meituan.net/csc/fc0a2fe1b9fcae273668faa89cde579a15465.png
+heroImage: "../../assets/post-heroes/20221208-argo-tunnel.png"
 tags:
   - 内网穿透
   - Argo Tunnel
