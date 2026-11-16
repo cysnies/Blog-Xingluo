@@ -11,6 +11,11 @@ export default defineXingluoConfig({
     description: "一个平平无奇的个人博客",
     author: "白鼠 Cysnies",
     profile: "https://blog.tcea.top/",
+    avatar: {
+      src: "https://img.tcea.top/blog/2026/11/83bf4ca6107f1cc6dd7f16c567125b7e.jpg",
+      alt: "白鼠 Cysnies",
+      shape: "circle",
+    },
     ogImage: "default-og.jpg",
     lang: "zh-cn",
     timezone: "Asia/Shanghai",
