@@ -13,7 +13,7 @@ import { getPostsForLocale } from "@/utils/i18nPosts";
 import { getCardWidth } from "@/utils/getCardWidth";
 import { toTransitionName } from "@/utils/toTransitionName";
 import { slugifyStr } from "@/utils/slugify";
-import { useTranslations, tplStr } from "@/i18n";
+import { useTranslations } from "@/i18n";
 import config from "@/config";
 import ArrowRight from "@/assets/icons/ArrowRight.astro";
 
@@ -82,14 +82,14 @@ for (const { category, categoryName } of categories) {
                   variant="ghost"
                   size="sm"
                 >
-                  {tplStr(t.categories.viewAll, { category: categoryName })}
+                  {t.categories.viewAll}
                   <ArrowRight class="size-4 rtl:-rotate-180" />
                 </LinkButton>
               </div>
 
               <!-- 文章卡片网格，布局方式与首页一致 -->
               {categoryPosts.length > 0 ? (
-                <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+                <ul class="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {categoryPosts.map((post) => {
                     const width = getCardWidth(
                       post,

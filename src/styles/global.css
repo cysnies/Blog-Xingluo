@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "./theme.css";
-@import "./typography.css";
+@import "./palettes.css";
 @import "rehype-callouts/theme/obsidian";
 
 /* 加载 Tailwind v4 插件 */
@@ -11,8 +11,9 @@
 
 /* 将 CSS 变量映射为 Tailwind 主题令牌，使 bg-background 等工具类可用 */
 @theme inline {
-  --font-sans: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
-  --font-mono: var(--font-mono, ui-monospace, monospace);
+  /* 字体令牌：值来自 :root（theme.css / Layout style） */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 
   /* 圆角阶梯 */
   --radius-sm: calc(var(--radius) * 0.6);
@@ -21,6 +22,13 @@
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: var(--radius-4xl, calc(var(--radius) * 2.6));
+
+  /* 阴影：theme 用 --app-shadow-*，映射到 Tailwind --shadow-*，随 data-ui-style 变 */
+  --shadow-2xs: var(--app-shadow-xs);
+  --shadow-xs: var(--app-shadow-xs);
+  --shadow-sm: var(--app-shadow-sm);
+  --shadow-md: var(--app-shadow-md);
 
   /* 颜色令牌 */
   --color-background: var(--background);
@@ -48,6 +56,19 @@
   --color-code-number: var(--code-number);
   --color-selection: var(--selection);
   --color-selection-foreground: var(--selection-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 /* 全局基础样式 */
@@ -79,6 +100,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100dvh;
+    /* 刘海屏安全区，避免贴边 */
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
   }
 
   /* 选区配色 */
@@ -116,9 +140,28 @@
  * 自定义工具类
  */
 
-/* 内容容器最大宽度 */
+/* 内容容器最大宽度（页头/列表壳层） */
 @utility max-w-app {
   max-width: var(--content-width);
+}
+
+/* 页面边框与各区块的灰色分割线共用内容边界。 */
+@utility site-frame {
+  --frame-gutter: 1rem;
+  border-inline: 1px solid var(--color-border);
+
+  @media (min-width: 40rem) {
+    --frame-gutter: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    --frame-gutter: 2rem;
+  }
+}
+
+/* 正文舒适阅读宽度 */
+@utility max-w-prose-app {
+  max-width: var(--prose-width);
 }
 
 /* 应用整体布局：sticky 头部 + 中间内容 + 底部页脚 */
@@ -132,13 +175,17 @@
  * 动效动画相关
  */
 
-/* 滚入渐现动画：初始隐藏，标记后可见 */
+/* 内容默认可见；仅在滚入观察者就绪后隐藏待展示元素 */
 [data-reveal] {
-  opacity: 0;
-  transform: translateY(1.5rem);
+  opacity: 1;
+  transform: translateY(0);
   transition:
     opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-reveal].reveal-pending {
+  opacity: 0;
+  transform: translateY(1.5rem);
 }
 [data-reveal].is-visible {
   opacity: 1;
@@ -160,18 +207,6 @@
 }
 [data-reveal]:nth-child(6) {
   transition-delay: 0.25s;
-}
-
-/* 卡片点击涟漪关键帧 */
-@keyframes card-ripple {
-  from {
-    transform: scale(0);
-    opacity: 0.4;
-  }
-  to {
-    transform: scale(1);
-    opacity: 0;
-  }
 }
 
 /* 主题切换平滑过渡 */
@@ -232,5 +267,22 @@
   }
   .animate-fade-in-down {
     animation: none !important;
+  }
+}
+
+/* 评论区触控友好间距 */
+.xng-comments {
+  scroll-margin-top: 5rem;
+}
+.xng-comments-mount {
+  min-height: 2.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 文章内表格/代码在窄屏的额外保险（与 typography 配合） */
+@media (max-width: 639px) {
+  .app-prose pre,
+  .app-prose .astro-code {
+    border-radius: 0.5rem;
   }
 }

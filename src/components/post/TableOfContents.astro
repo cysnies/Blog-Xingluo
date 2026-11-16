@@ -1,39 +1,83 @@
 ---
 import type { MarkdownHeading } from "astro";
+import { useTranslations } from "@/i18n";
 
 interface Props {
   headings: MarkdownHeading[];
   /** 目录标题文案 */
   label: string;
+  showTitle?: boolean;
 }
 
-const { headings, label } = Astro.props;
+const { headings, label, showTitle = true } = Astro.props;
+const progressLabel = useTranslations(Astro.currentLocale).post.readingProgress;
 
 // 仅取 h2~h6 作为目录项
 const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
 // 以最浅标题深度为基准，计算每项的缩进层级
-const minDepth = tocHeadings.length > 0 ? tocHeadings[0].depth : 2;
+const minDepth =
+  tocHeadings.length > 0 ? Math.min(...tocHeadings.map((h) => h.depth)) : 2;
 const hasToc = tocHeadings.length >= 2;
 ---
 
 {
   hasToc && (
-    <nav aria-label={label} class="text-sm">
-      <p class="mb-3 font-medium text-foreground">{label}</p>
-      <ul class="space-y-1.5 border-l border-border">
-        {tocHeadings.map((heading) => (
-          <li>
-            <a
-              href={`#${heading.slug}`}
-              data-toc-link={heading.slug}
-              style={`padding-left:${(heading.depth - minDepth) * 0.75 + 0.75}rem`}
-              class="-ml-px block border-l-2 border-transparent text-muted-foreground motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out hover:text-foreground data-[active=true]:border-primary data-[active=true]:text-foreground data-[active=true]:border-l-[3px]"
-            >
-              {heading.text}
-            </a>
-          </li>
-        ))}
-      </ul>
+    <nav data-toc aria-label={label} class="text-sm">
+      {showTitle && (
+        <div
+          data-toc-header
+          class="sticky top-0 z-10 mb-3 flex items-center justify-between gap-3 bg-background/95 py-1 backdrop-blur-sm"
+        >
+          <p class="font-medium text-foreground">{label}</p>
+          <span
+            data-reading-progress-meter
+            role="progressbar"
+            aria-label={progressLabel}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            class="text-xs tabular-nums text-muted-foreground"
+          >
+            <span data-reading-progress-value aria-hidden="true">
+              0%
+            </span>
+          </span>
+        </div>
+      )}
+      <div data-toc-track class="relative border-s border-border">
+        <span
+          data-toc-thumb
+          hidden
+          aria-hidden="true"
+          class="pointer-events-none absolute -start-px top-0 w-[3px] rounded-full bg-primary transition-[transform,height] duration-200 motion-reduce:transition-none"
+        />
+        <ul class="space-y-0.5">
+          {tocHeadings.map((heading) => (
+            <li>
+              <a
+                href={`#${heading.slug}`}
+                data-toc-link={heading.slug}
+                style={`padding-inline-start:${(heading.depth - minDepth) * 0.75 + 1}rem`}
+                class="block rounded-sm py-1.5 pe-2 leading-relaxed text-muted-foreground transition-colors duration-150 hover:text-foreground data-[active=true]:font-medium data-[active=true]:text-foreground motion-reduce:transition-none"
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }
+
+<style>
+  :global(#article :is(h2, h3, h4, h5, h6)[id]) {
+    scroll-margin-top: var(--toc-scroll-offset, 8rem);
+  }
+
+  @media (min-width: 64rem) {
+    :global(#article :is(h2, h3, h4, h5, h6)[id]) {
+      scroll-margin-top: var(--toc-scroll-offset, 5rem);
+    }
+  }
+</style>

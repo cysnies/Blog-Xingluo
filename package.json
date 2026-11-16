@@ -1,22 +1,24 @@
 {
   "name": "xingluo",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "星罗 - 基于 Astro 与 shadcn 的博客 CMS",
+  "description": "星罗 - 基于 Astro 与 shadcn 视觉风格的现代化博客主题",
   "packageManager": "pnpm@10.21.0",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && node scripts/generateSearchIndex.mjs && node scripts/cleanOrphanAssets.mjs",
+    "build": "node scripts/checkAssets.mjs && astro check && astro build && node scripts/generateSearchIndex.mjs && node scripts/cleanOrphanAssets.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:assets": "node scripts/checkAssets.mjs",
+    "typecheck": "astro check"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.1",
