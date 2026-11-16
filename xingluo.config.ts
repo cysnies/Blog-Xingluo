@@ -42,7 +42,7 @@ export default defineXingluoConfig({
       enabled: false,
       url: "https://github.com/cysnies/Blog-Xingluo/edit/main/",
     },
-    search: "flexsearch",
+    search: "pagefind",
     mdx: true,
     comments: {
       provider: "twikoo",
