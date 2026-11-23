@@ -182,6 +182,20 @@ export function detectPlatform(rawUrl: string): PlatformMatch | null {
     }
   }
 
+  if (host === "arxiv.org") {
+    const paper = u.pathname.match(
+      /^\/(?:abs|pdf|html)\/((?:\d{4}\.\d{4,5}|[a-z][a-z0-9.-]*\/\d{7})(?:v[1-9]\d*)?)(?:\.pdf)?\/?$/i,
+    );
+    if (paper?.[1]) {
+      return {
+        platform: "arxiv",
+        kind: "article",
+        url,
+        params: { id: paper[1] },
+      };
+    }
+  }
+
   // Hugging Face
   if (host === "huggingface.co") {
     if (parts[0] === "datasets" && parts.length >= 3) {

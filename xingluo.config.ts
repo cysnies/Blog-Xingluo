@@ -16,12 +16,17 @@ export default defineXingluoConfig({
       alt: "白鼠 Cysnies",
       shape: "circle",
     },
+    navbarBrand: {
+      mode: "image-text",
+      src: "blog-avatar.png",
+      shape: "circle",
+    },
     ogImage: "default-og.jpg",
     lang: "zh-cn",
     timezone: "Asia/Shanghai",
     dir: "ltr",
     favicon: {
-      svg: "favicon.svg",
+      png: "blog-avatar.png",
     },
   },
   posts: {

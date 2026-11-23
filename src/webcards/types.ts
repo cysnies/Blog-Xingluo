@@ -5,7 +5,8 @@ export type WebCardPlatform =
   | "bilibili"
   | "zhihu"
   | "twitter"
-  | "huggingface";
+  | "huggingface"
+  | "arxiv";
 
 /** 平台内资源类型 */
 export type WebCardKind =

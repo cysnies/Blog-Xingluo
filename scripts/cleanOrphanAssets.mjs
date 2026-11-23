@@ -17,6 +17,7 @@ import { resolve, dirname, join, relative, sep } from "node:path";
 
 const distDir = resolve("dist");
 const astroDir = join(distDir, "_astro");
+const base = (process.env.CI_BASE_URL ?? "").replace(/\/+$/, "");
 
 /** 递归收集目录下所有文件路径 */
 async function walk(dir, files = []) {
@@ -48,20 +49,21 @@ function extractAssetRefs(text, currentFile) {
   // 匹配所有引号字符串，过滤常见资源扩展名
   const re =
     /["'`]([^"'`\s]+\.(?:js|css|woff|woff2|ttf|otf|eot|png|jpg|jpeg|gif|webp|avif|svg))["'`]/g;
-  let m;
-  while ((m = re.exec(text)) !== null) {
-    const raw = m[1];
-    // 跳过外部 URL 与 data URI
-    if (/^(https?:|\/\/|data:)/.test(raw)) continue;
+  const isCss = currentFile.endsWith(".css");
+  const cssUrls = isCss
+    ? text.matchAll(/url\(\s*["']?([^"'()\s]+)["']?\s*\)/gi)
+    : [];
+  for (const match of [...text.matchAll(re), ...cssUrls]) {
+    const raw = match[1].split(/[?#]/, 1)[0];
+    if (!raw || /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(raw)) continue;
     let abs;
     if (raw.startsWith("/")) {
-      // 站点根绝对路径
-      abs = join(distDir, raw.slice(1));
+      const sitePath =
+        base && raw.startsWith(base + "/") ? raw.slice(base.length) : raw;
+      abs = join(distDir, sitePath.slice(1));
     } else if (raw.startsWith("_astro/")) {
-      // Vite mapDeps 形式，相对 dist 根
       abs = join(distDir, raw);
-    } else if (raw.startsWith("./") || raw.startsWith("../")) {
-      // 相对当前文件
+    } else if (isCss || raw.startsWith("./") || raw.startsWith("../")) {
       abs = resolve(dirname(currentFile), raw);
     } else {
       continue;

@@ -10,6 +10,9 @@ import { unified } from "@astrojs/markdown-remark";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import remarkToc from "remark-toc";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import rehypeMathjax from "rehype-mathjax/svg";
 import remarkCollapse from "remark-collapse";
 import rehypeCallouts from "rehype-callouts";
 import {
@@ -104,6 +107,20 @@ const remarkPlugins: any[] = [
   remarkToc,
   [remarkCollapse, { test: "Table of contents" }],
 ];
+const mathRenderer = config.features?.math ?? "katex";
+const rehypePlugins: NonNullable<
+  Parameters<typeof unified>[0]
+>["rehypePlugins"] = [rehypeCallouts, rehypeWrapTable];
+if (mathRenderer !== false) {
+  remarkPlugins.unshift(remarkMath);
+}
+if (mathRenderer === "katex") {
+  rehypePlugins.push(rehypeKatex);
+}
+if (mathRenderer === "mathjax") {
+  rehypePlugins.push(rehypeMathjax);
+}
+
 if (playersEnabled) {
   remarkPlugins.push([
     remarkPlayers,
@@ -152,7 +169,7 @@ export default defineConfig({
     // 将 remark/rehype 插件传入 unified 处理器，避免使用已弃用的顶级字段
     processor: unified({
       remarkPlugins,
-      rehypePlugins: [rehypeCallouts, rehypeWrapTable],
+      rehypePlugins,
     }),
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },

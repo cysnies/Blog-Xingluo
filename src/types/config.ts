@@ -53,6 +53,8 @@ export type NavbarBrandConfig = {
       src: string;
       /** 图片替代文字，纯图片模式省略时使用品牌文字 */
       alt?: string;
+      /** 圆形裁切；省略时保留图片原始比例 */
+      shape?: "circle";
     }
 );
 
@@ -70,6 +72,8 @@ export interface AvatarConfig {
 export interface FaviconConfig {
   /** 主图标文件名（位于 public 目录），默认 favicon.svg */
   svg?: string;
+  /** PNG 主图标文件名（位于 public 目录） */
+  png?: string;
   /** 传统 ICO 格式图标文件名（位于 public 目录），兼容旧浏览器 */
   ico?: string;
   /** Apple Touch Icon 文件名（位于 public 目录），推荐 180x180 PNG */
@@ -292,6 +296,8 @@ export interface FeaturesConfig {
   search: "pagefind" | "flexsearch" | false;
   /** 是否启用 MDX 解析与渲染（关闭时仅收集 .md 且不加载 mdx 集成） */
   mdx: boolean;
+  /** LaTeX 构建期渲染器；默认 KaTeX，可切换为 MathJax 或关闭 */
+  math: "katex" | "mathjax" | false;
   /** 评论系统配置 */
   comments: CommentsConfig;
   /** 媒体播放器开关 */

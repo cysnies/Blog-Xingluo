@@ -9,10 +9,17 @@ interface Props {
 const { favicon } = Astro.props;
 ---
 
-{/* 主图标：SVG 优先，现代浏览器首选 */}
+{/* SVG 图标 */}
 {
   favicon.svg && (
     <link rel="icon" type="image/svg+xml" href={getAssetPath(favicon.svg)} />
+  )
+}
+
+{/* PNG 图标 */}
+{
+  favicon.png && (
+    <link rel="icon" type="image/png" href={getAssetPath(favicon.png)} />
   )
 }
 
@@ -26,10 +33,7 @@ const { favicon } = Astro.props;
 {/* Apple Touch Icon，iOS 主屏图标，推荐 180x180 PNG */}
 {
   favicon.appleTouchIcon && (
-    <link
-      rel="apple-touch-icon"
-      href={getAssetPath(favicon.appleTouchIcon)}
-    />
+    <link rel="apple-touch-icon" href={getAssetPath(favicon.appleTouchIcon)} />
   )
 }
 

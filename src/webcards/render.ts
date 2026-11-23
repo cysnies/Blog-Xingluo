@@ -20,6 +20,8 @@ function platformLabel(data: WebCardData, t: WebCardLabels): string {
       return t.platformZhihu;
     case "twitter":
       return t.platformTwitter;
+    case "arxiv":
+      return "arXiv";
     case "huggingface":
       return t.platformHuggingFace;
     default:

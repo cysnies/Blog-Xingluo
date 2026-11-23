@@ -1,5 +1,6 @@
 import { cacheGet, cacheSet } from "./cache";
 import { detectPlatform } from "./detect";
+import { fetchArxiv } from "./adapters/arxiv";
 import { fetchBilibili } from "./adapters/bilibili";
 import { fetchGeneric } from "./adapters/generic";
 import { fetchGitHub } from "./adapters/github";
@@ -31,10 +32,9 @@ export async function resolveWebCard(
       degraded: true,
     };
   }
-  const cached = cacheGet(url, cfg.cache);
-  if (cached) return cached;
-
   const match = detectPlatform(url);
+  const cached = cacheGet(url, cfg.cache);
+  if (cached && cached.platform === match?.platform) return cached;
   if (!match) {
     const degraded: WebCardData = {
       url,
@@ -61,6 +61,9 @@ export async function resolveWebCard(
         break;
       case "twitter":
         data = await fetchTwitter(match, cfg.timeoutMs);
+        break;
+      case "arxiv":
+        data = await fetchArxiv(match, cfg.timeoutMs);
         break;
       case "huggingface":
         data = await fetchHuggingFace(match, cfg.timeoutMs);

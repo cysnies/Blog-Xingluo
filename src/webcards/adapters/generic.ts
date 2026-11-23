@@ -26,7 +26,7 @@ function decodeHtml(s: string): string {
     .replace(/&#39;/g, "'");
 }
 
-function faviconFrom(html: string, pageUrl: string): string | undefined {
+export function faviconFrom(html: string, pageUrl: string): string | undefined {
   const m =
     html.match(
       /<link[^>]+rel=["'](?:shortcut icon|icon|apple-touch-icon)["'][^>]+href=["']([^"']+)["']/i,

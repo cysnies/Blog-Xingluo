@@ -74,6 +74,22 @@
   @apply prose-table:text-sm;
 }
 
+/* 宽公式在正文内横向滚动，短公式保持居中。 */
+.app-prose :is(.katex-display, mjx-container[display="true"]) {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.app-prose .katex-display > .katex {
+  width: max-content;
+  min-width: 100%;
+}
+
+.app-prose mjx-container[display="true"] > svg {
+  display: inline-block;
+}
+
 .app-prose > :first-child {
   margin-top: 0;
 }

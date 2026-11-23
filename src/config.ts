@@ -81,6 +81,7 @@ const defaultFeatures = {
   uiStyle: "new-york" as const,
   /** 默认启用 MDX 解析与渲染 */
   mdx: true,
+  math: "katex" as const,
   /** 默认关闭评论系统 */
   comments: {
     provider: false as const,
@@ -169,7 +170,8 @@ function resolveFavicon(
 ): XingluoConfig["site"]["favicon"] {
   const userFavicon = partial ?? {};
   return {
-    svg: userFavicon.svg ?? DEFAULT_FAVICON_SVG,
+    svg: userFavicon.svg ?? (userFavicon.png ? undefined : DEFAULT_FAVICON_SVG),
+    png: userFavicon.png,
     ico: userFavicon.ico,
     appleTouchIcon: userFavicon.appleTouchIcon,
     manifest: userFavicon.manifest,
