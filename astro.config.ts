@@ -27,6 +27,7 @@ import { remarkWebCards } from "./src/utils/remarkWebCards";
 import { googleFontsMirrorProvider } from "./src/utils/googleFontsMirrorProvider";
 import config from "./xingluo.config";
 import { optionalDepsPlugin } from "./src/vite/optionalDepsPlugin";
+import { assetOrigin } from "./scripts/assetOrigin.mjs";
 
 /** UI 语言全集（须与 src/i18n/lang/*.ts 对齐） */
 const ALL_UI_LOCALES = [
@@ -153,12 +154,12 @@ const ciSiteUrl = process.env.CI_SITE_URL;
 const ciBaseUrl = process.env.CI_BASE_URL;
 const siteUrl = ciSiteUrl || config.site?.url;
 const baseUrl = ciBaseUrl || undefined;
-const assetOrigin = process.env.CI_ASSET_ORIGIN?.replace(/\/+$/, "");
+const assetsPrefix = process.env.NODE_ENV === "development" ? "" : assetOrigin;
 
 export default defineConfig({
   site: siteUrl,
   base: baseUrl,
-  build: { assetsPrefix: assetOrigin },
+  build: { assetsPrefix: assetsPrefix || undefined },
   integrations,
   i18n: {
     locales: enabledLocales,

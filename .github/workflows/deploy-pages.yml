@@ -11,6 +11,7 @@ on:
       - "xingluo.config.ts"
       - "package.json"
       - "pnpm-lock.yaml"
+      - "scripts/assetOrigin.mjs"
       - "scripts/cleanOrphanAssets.mjs"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
@@ -76,8 +77,6 @@ jobs:
         env:
           CI_SITE_URL: ${{ steps.urls.outputs.site_url }}
           CI_BASE_URL: ${{ steps.urls.outputs.base_url }}
-          # 资源由同一份 Pages 产物直出，避免主域名回源混用不同版本的 HTML 和静态文件。
-          CI_ASSET_ORIGIN: https://blog5.tcea.top
           PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_VERIFICATION }}
 
       - name: 上传 Pages 产物

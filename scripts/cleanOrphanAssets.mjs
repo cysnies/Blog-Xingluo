@@ -14,11 +14,11 @@
  */
 import { readdir, readFile, unlink, stat } from "node:fs/promises";
 import { resolve, dirname, join, relative, sep } from "node:path";
+import { assetOrigin } from "./assetOrigin.mjs";
 
 const distDir = resolve("dist");
 const astroDir = join(distDir, "_astro");
 const base = (process.env.CI_BASE_URL ?? "").replace(/\/+$/, "");
-const assetOrigin = (process.env.CI_ASSET_ORIGIN ?? "").replace(/\/+$/, "");
 
 /** 递归收集目录下所有文件路径 */
 async function walk(dir, files = []) {
