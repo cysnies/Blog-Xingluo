@@ -73,13 +73,13 @@ export const BUILTIN_FONTS: FontDefinition[] = [
     label: "LXGW WenKai Lite",
     family: "LXGW WenKai Lite",
     stack: '"LXGW WenKai Lite", "LXGW WenKai", "KaiTi", serif',
-    source: "local",
-    cssUrl: "fonts/lxgw-wenkai-lite/regular.css?v=20261117-3",
-    cssUrls: ["fonts/lxgw-wenkai-lite/regular.css?v=20261117-3"],
+    source: "cdn",
+    cssUrl:
+      "https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/lxgwwenkailite-regular.css",
     monoStack:
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
     license: "OFL-1.1",
-    note: "文楷精简版；仅加载常规字重，字体子集同源按需加载",
+    note: "文楷精简版；仅加载常规字重，按需获取字体子集",
   },
   {
     id: "lxgw-wenkai-screen",

@@ -26,7 +26,7 @@ export default defineXingluoConfig({
     timezone: "Asia/Shanghai",
     dir: "ltr",
     favicon: {
-      png: "blog-avatar.png",
+      svg: "blog-favicon.svg",
     },
   },
   posts: {

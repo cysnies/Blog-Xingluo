@@ -13,6 +13,7 @@ import remarkToc from "remark-toc";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeMathjax from "rehype-mathjax/svg";
+import { version as katexVersion } from "katex";
 import remarkCollapse from "remark-collapse";
 import rehypeCallouts from "rehype-callouts";
 import {
@@ -184,7 +185,19 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [optionalDepsPlugin(), tailwindcss()],
+    plugins: [
+      optionalDepsPlugin(),
+      tailwindcss(),
+      {
+        name: "xingluo-katex-font-mirror",
+        enforce: "pre",
+        transform(css, id) {
+          if (!id.endsWith("/katex/dist/katex.min.css")) return;
+          const fonts = `https://registry.npmmirror.com/katex/${katexVersion}/files/dist/fonts/`;
+          return css.replaceAll("url(fonts/", `url(${fonts}`);
+        },
+      },
+    ],
   },
   experimental: {
     // 启用 SVG 优化，自动压缩内联与引用的 SVG 图标
