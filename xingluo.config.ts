@@ -37,6 +37,10 @@ export default defineXingluoConfig({
   features: {
     lightAndDarkMode: true,
     dynamicOgImage: true,
+    googleFontsMirror: {
+      enabled: true,
+      url: "https://fonts.googleapis.cn",
+    },
     showArchives: true,
     showCategories: true,
     showBackButton: true,
