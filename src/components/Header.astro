@@ -1,7 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { stripBase, stripLocale } from "@/utils/withBase";
-import { getPublicAssetPath } from "@/utils/publicAssets";
+import { getAssetPath, stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import { getSiteTitle } from "@/utils/siteBrand";
@@ -19,7 +18,7 @@ const brand = config.site.navbarBrand ?? { mode: "text" };
 const brandText = brand.textByLocale?.[locale] ?? brand.text ?? getSiteTitle(locale);
 const brandImage = brand.mode === "text" ? undefined : brand.src.trim();
 const brandImageUrl = brandImage &&
-  (/^(?:https?:)?\/\//i.test(brandImage) ? brandImage : getPublicAssetPath(brandImage));
+  (/^(?:https?:)?\/\//i.test(brandImage) ? brandImage : getAssetPath(brandImage));
 
 // 剥离 base 前缀，使 isActive 判断不受部署子目录影响
 const relativePath = stripBase(Astro.url.pathname);

@@ -14,7 +14,6 @@
  */
 import { readdir, readFile, unlink, stat } from "node:fs/promises";
 import { resolve, dirname, join, relative, sep } from "node:path";
-import { assetOrigin } from "./assetOrigin.mjs";
 
 const distDir = resolve("dist");
 const astroDir = join(distDir, "_astro");
@@ -62,10 +61,6 @@ function extractAssetRefs(text, currentFile) {
     : [];
   for (const match of [...text.matchAll(re), ...cssUrls, ...srcsetUrls]) {
     const raw = match[1].split(/[?#]/, 1)[0];
-    if (assetOrigin && raw.startsWith(`${assetOrigin}/_astro/`)) {
-      refs.add(join(distDir, raw.slice(assetOrigin.length + 1)));
-      continue;
-    }
     if (!raw || /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(raw)) continue;
     let abs;
     if (raw.startsWith("/")) {
