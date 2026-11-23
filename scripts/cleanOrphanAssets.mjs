@@ -18,6 +18,7 @@ import { resolve, dirname, join, relative, sep } from "node:path";
 const distDir = resolve("dist");
 const astroDir = join(distDir, "_astro");
 const base = (process.env.CI_BASE_URL ?? "").replace(/\/+$/, "");
+const assetOrigin = (process.env.CI_ASSET_ORIGIN ?? "").replace(/\/+$/, "");
 
 /** 递归收集目录下所有文件路径 */
 async function walk(dir, files = []) {
@@ -53,8 +54,18 @@ function extractAssetRefs(text, currentFile) {
   const cssUrls = isCss
     ? text.matchAll(/url\(\s*["']?([^"'()\s]+)["']?\s*\)/gi)
     : [];
-  for (const match of [...text.matchAll(re), ...cssUrls]) {
+  // srcset 的每个候选 URL 后面有尺寸描述符，不能按单个引号字符串读取。
+  const srcsetUrls = currentFile.endsWith(".html")
+    ? [
+        ...text.matchAll(/\s(?:srcset|imagesrcset)\s*=\s*(["'])(.*?)\1/gis),
+      ].flatMap(([, , srcset]) => [...srcset.matchAll(/(?:^|,)\s*([^,\s]+)/g)])
+    : [];
+  for (const match of [...text.matchAll(re), ...cssUrls, ...srcsetUrls]) {
     const raw = match[1].split(/[?#]/, 1)[0];
+    if (assetOrigin && raw.startsWith(`${assetOrigin}/_astro/`)) {
+      refs.add(join(distDir, raw.slice(assetOrigin.length + 1)));
+      continue;
+    }
     if (!raw || /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(raw)) continue;
     let abs;
     if (raw.startsWith("/")) {

@@ -153,10 +153,12 @@ const ciSiteUrl = process.env.CI_SITE_URL;
 const ciBaseUrl = process.env.CI_BASE_URL;
 const siteUrl = ciSiteUrl || config.site?.url;
 const baseUrl = ciBaseUrl || undefined;
+const assetOrigin = process.env.CI_ASSET_ORIGIN?.replace(/\/+$/, "");
 
 export default defineConfig({
   site: siteUrl,
   base: baseUrl,
+  build: { assetsPrefix: assetOrigin },
   integrations,
   i18n: {
     locales: enabledLocales,
